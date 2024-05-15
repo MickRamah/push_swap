@@ -6,109 +6,128 @@
 /*   By: zramahaz <zramahaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 11:00:41 by zramahaz          #+#    #+#             */
-/*   Updated: 2024/05/08 16:30:54 by zramahaz         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:31:23 by zramahaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void    sa(t_list *a);
+static void	ft_sorted_three_nb(t_list **a);
+static void	ft_sorted_nbs(t_list **a, t_list **b);
+static void	ft_sorted_five_nbs(t_list **a, t_list **b);
+static void	ft_search_min_and_swap(t_list *a);
 
-void    push_swap(int argc, char **argv)
+void	push_swap(int argc, char **argv)
 {
-    t_list  *a;
-    t_list  *b;
-    t_list  *current;
-    int     i = 0;
+	t_list	*a;
+	t_list	*b;
 
-    a = NULL;
-    b = NULL;
-    if (argc == 1 || (argc == 2 && argv[1][0] == '\0'))
-        exit(1);
-    if (argc == 2)
-        argv = ft_split(argv[1], ' '); // deja reglE (malloc et free)
-    else
-        argv = argv + 1;
-    ft_test_and_stash(argc, &a, argv); // malloc a
-    // while (a)
-    // {
-    //     printf("a->prev =      %p\n", a->prev);
-    //     printf("a(addresse) =  %p\n", a);
-    //     printf("a->content =  |%d|\n", a->content);
-    //     printf("a->next =      %p\n", a->next);
-    //     printf("------------------------------------------------\n");
-    //     a = a->next;
-    // }
-
-    //ra mbola tsy trie ilay liste
-    if (!stash_sorted(a))
-    {
-        // current = a;
-        // while (current)
-        // {
-        //     printf("%d\n", current->content);
-        //     current = current->next;
-        // }
-        // printf("a |\n");
-        //  printf("------------------------------\n");
-        if (ft_stash_len(a) == 2)
-            sa(a);
-    }
-    else
-        printf("triE\n");
-    while (a)
-        {
-            printf("%d\n", a->content);
-            a = a->next;
-        }
-        printf("a |\n");
-        printf("------------------------------\n");
+	a = NULL;
+	b = NULL;
+	if (argc == 1 || (argc == 2 && argv[1][0] == '\0'))
+	{
+		write(1, "Error\n", 6);
+		exit(1);
+	}
+	if (argc == 2)
+		argv = ft_split(argv[1], ' ');
+	else
+		argv = argv + 1;
+	ft_test_and_stash(argc, &a, argv);
+	if (!stash_sorted(a))
+	{
+		if (ft_stash_len(a) == 2)
+			sa(a, 1);
+		else if (ft_stash_len(a) == 3)
+			ft_sorted_three_nb(&a);
+		else
+			ft_sorted_nbs(&a, &b);
+	}
+	ft_free_stash(a);
 }
 
-void ft_test_and_stash(int argc, t_list **a, char **argv)
+static void	ft_sorted_three_nb(t_list **a)
 {
-    int     i;
-    long    nb;
+	t_list	*current;
 
-    i = 0;
-    while (argv[i])
-    {
-        if (ft_error(argv[i]))
-            ft_free_and_exit(a, argv, argc); // en cas d'erreur, free a argv
-        nb = ft_atoi(argv[i]);
-        if (ft_stash_and_check_repetition(a, nb)) // malloc a
-            ft_free_and_exit(a, argv, argc); // en cas d'erreur, free a argv
-        i++;
-    }
-    if (argc == 2)
-    {
-        i = 0;
-        while (argv[i])
-        {
-            free(argv[i]);
-            i++;
-        }
-    }
+	current = *a;
+	if (current->content > current->next->content)
+	{
+		if (current->content < current->next->next->content)
+			sa(*a, 1);
+		else if (current->next->content < current->next->next->content)
+			ra(a, 1);
+		else
+		{
+			sa(*a, 1);
+			rra(a, 1);
+		}
+	}
+	else
+	{
+		if (current->content < current->next->next->content)
+		{
+			sa(*a, 1);
+			ra(a, 1);
+		}
+		else
+			rra(a, 1);
+	}
 }
 
-static void    sa(t_list *a)
+static void	ft_sorted_nbs(t_list **a, t_list **b)
 {
-    int tmp;
-
-    tmp = a->content;
-    a->content = a->next->content;
-    a->next->content = tmp;
-    write(1, "sa\n", 3);
-    printf("---------------------------------\n");
+	if (ft_stash_len(*a) <= 5 && ft_stash_len(*a) >= 4)
+	{
+		ft_sorted_five_nbs(a, b);
+	}
 }
 
-static void    sb(t_list *a)
+static void	ft_sorted_five_nbs(t_list **a, t_list **b)
 {
-    int tmp;
+	if (ft_stash_len(*a) == 5)
+	{
+		while (ft_stash_len(*a) > 3)
+		{
+			ft_search_min_and_swap(*a);
+			pb(a, b);
+		}
+		ft_sorted_three_nb(a);
+		pa(b, a);
+		pa(b, a);
+	}
+	else
+	{
+		while (ft_stash_len(*a) > 3)
+		{
+			ft_search_min_and_swap(*a);
+			pb(a, b);
+		}
+		ft_sorted_three_nb(a);
+		pa(b, a);
+	}
+}
 
-    tmp = b->content;
-    b->content = b->next->content;
-    b->next->content = tmp;
-    write(1, "sb\n", 3);
-    printf("---------------------------------\n");
+static void	ft_search_min_and_swap(t_list *a)
+{
+	int		min;
+	int		tmp;
+	t_list	*pos;
+	t_list	*current;
+
+	min = a->content;
+	pos = a;
+	current = a->next;
+	while (current)
+	{
+		if (min > current->content)
+		{
+			min = current->content;
+			pos = current;
+		}
+		current = current->next;
+	}
+	tmp = a->content;
+	a->content = min;
+	pos->content = tmp;
 }

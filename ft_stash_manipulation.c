@@ -6,7 +6,7 @@
 /*   By: zramahaz <zramahaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 15:12:10 by zramahaz          #+#    #+#             */
-/*   Updated: 2024/05/15 16:37:35 by zramahaz         ###   ########.fr       */
+/*   Updated: 2024/05/19 11:12:47 by zramahaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,11 @@ void	ft_test_and_stash(int argc, t_list **a, char **argv)
 			free(argv[i]);
 			i++;
 		}
+		free(argv);
 	}
 }
 
-int	stash_sorted(t_list *a)
+int	ft_stash_sorted(t_list *a)
 {
 	while (a->next)
 	{
@@ -62,12 +63,12 @@ int	ft_stash_len(t_list *a)
 	return (count);
 }
 
-void	ft_free_stash(t_list *a)
+void	ft_free_stash(t_list **a)
 {
 	t_list	*current;
 	t_list	*tmp;
 
-	current = a;
+	current = *a;
 	while (current)
 	{
 		tmp = current->next;

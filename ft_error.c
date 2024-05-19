@@ -6,7 +6,7 @@
 /*   By: zramahaz <zramahaz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 11:00:25 by zramahaz          #+#    #+#             */
-/*   Updated: 2024/05/15 16:19:47 by zramahaz         ###   ########.fr       */
+/*   Updated: 2024/05/19 15:22:05 by zramahaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,8 @@ void	ft_free_and_exit(t_list **a, char **argv, int argc)
 	t_list	*tmp;
 	int		i;
 
-	current = *a;
-	while (current)
-	{
-		tmp = current->next;
-		free(current);
-		current = tmp;
-	}
-	*a = NULL;
 	i = 0;
+	current = *a;
 	if (argc == 2)
 	{
 		while (argv[i])
@@ -55,14 +48,21 @@ void	ft_free_and_exit(t_list **a, char **argv, int argc)
 			free(argv[i]);
 			i++;
 		}
+		free(argv);
 	}
+	while (current)
+	{
+		tmp = current->next;
+		free(current);
+		current = tmp;
+	}
+	*a = NULL;
 	write(1, "error\n", 6);
 	exit(1);
 }
 
 int	ft_stash_and_check_repetition(t_list **a, int nb)
 {
-	t_list	*current;
 	t_list	*new;
 	t_list	*last;
 

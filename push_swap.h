@@ -4,6 +4,7 @@
 # include <unistd.h>
 # include <limits.h>
 # include <stdlib.h>
+# include <stdbool.h>
 
 typedef struct s_list
 {
@@ -11,6 +12,7 @@ typedef struct s_list
     int             current_position;
     int             push_price;
     bool            above_mediane;
+    bool            cheapest;
     struct s_list   *next;
     struct s_list   *prev;
     struct s_list   *target_node;
@@ -30,11 +32,12 @@ char	*ft_strdup(const char *src);
 
 void    stack_init(int argc, char **argv, t_list **stack);
 void	push_swap(t_list **a, t_list **b);
-void    affichage(t_list **stack);
+// void    affichage(t_list **stack);
 
 t_list	*ft_get_last_list(t_list *stash);
 t_list	*find_highest(t_list *stack);
 t_list	*find_smallest(t_list *stack);
+t_list	*return_cheapest(t_list *stack);
 
 void	ss(t_list *a, t_list *b);
 void	sa(t_list *a, int status);
@@ -53,5 +56,11 @@ void	tiny_sort(t_list **stack);
 void	set_target_node(t_list *a, t_list *b);
 void	set_position_node(t_list *stack);
 void	set_price(t_list *a, t_list *b);
+void	set_cheapest(t_list *stack);
+
+void	rotate(t_list **a, t_list **b, t_list *cheapest_node);
+void	reverse_rotate(t_list **a, t_list **b, t_list *cheapest_node);
+void	finish_rotation_a(t_list	**a, t_list *cheapest_node);
+void	finish_rotation_b(t_list	**b, t_list *cheapest_node);
 
 #endif

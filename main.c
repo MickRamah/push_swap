@@ -2,33 +2,33 @@
 
 static void ft_free_stash(t_list **stack);
 
-void    affichage(t_list **stack)
-{
-    t_list *current;
-    t_list *last;
+// void    affichage(t_list **stack)
+// {
+//     t_list *current;
+//     t_list *last;
 
-    current = *stack;
-    last = ft_get_last_list(*stack);
-    printf("-----------------------------------------\n");
-    printf("tete  :");
-    while (current)
-    {
-        printf("%d -> ", current->value);
-        current = current->next;
-    }
-    printf("%p", current);
-    printf("\n");
-    printf("queue :");
-    while (last)
-    {
-        printf("%d -> ", last->value);
-        last = last->prev;
-    }
-    printf("%p", last);
-    printf("\n");
-    printf("-----------------------------------------\n");
+//     current = *stack;
+//     last = ft_get_last_list(*stack);
+//     printf("-----------------------------------------\n");
+//     printf("tete  :");
+//     while (current)
+//     {
+//         printf("%d -> ", current->value);
+//         current = current->next;
+//     }
+//     printf("%p", current);
+//     printf("\n");
+//     printf("queue :");
+//     while (last)
+//     {
+//         printf("%d -> ", last->value);
+//         last = last->prev;
+//     }
+//     printf("%p", last);
+//     printf("\n");
+//     printf("-----------------------------------------\n");
 
-}
+// }
 
 int main(int argc, char **argv)
 {
@@ -56,7 +56,6 @@ int main(int argc, char **argv)
         else
             push_swap(&a, &b);
     }
-    affichage(&a);
     ft_free_stash(&a);
     return (0);
 }

@@ -111,7 +111,7 @@ void	set_position_node(t_list *stack)
 	if (stack == NULL)
 		return ;
 	i = 0;
-	center = stack_len(stack) / 2;
+	center = (stack_len(stack)) / 2;
 	while (stack)
 	{
 		stack->current_position = i;
@@ -134,7 +134,45 @@ void	set_price(t_list *a, t_list *b)
 		if (b->target_node->above_mediane == true)
 			b->push_price += b->target_node->current_position;
 		else
-			b->push_price += stack_len(*a) -  b->target_node->current_position;
+			b->push_price += stack_len(a) -  b->target_node->current_position;
 		b = b->next;
 	}
+}
+
+void	set_cheapest(t_list *stack)
+{
+	int		min;
+	t_list	*pos_node;
+
+	if (stack  == NULL)
+		return ;
+	pos_node = NULL;
+	min = INT_MAX;
+	while (stack)
+	{
+		if (stack->push_price < min)
+		{
+			min = stack->push_price;
+			pos_node = stack;
+		}
+		stack->cheapest = false;
+		stack = stack->next;
+	}
+	pos_node->cheapest = true;
+}
+
+t_list	*return_cheapest(t_list *stack)
+{
+	t_list	*cheapest_node;
+
+	if (stack == NULL)
+		return (NULL);
+	cheapest_node = NULL;
+	while (stack)
+	{
+		if (stack->cheapest == true)
+			return (stack);
+		stack = stack->next;
+	}
+	return (NULL);
 }

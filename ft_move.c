@@ -1,5 +1,7 @@
 #include "push_swap.h"
 
+static void	swap(t_list **head);
+
 void	ss(t_list *a, t_list *b)
 {
 	sa(a, 0);
@@ -198,4 +200,44 @@ void	pb(t_list **a, t_list **b)
 	// 	tmp_1->next = tmp_2;
 	// }
 	write(1, "pb\n", 3);
+}
+
+void	rotate(t_list **a, t_list **b, t_list *cheapest_node)
+{
+	while (*a != cheapest_node->target_node
+		&& *b != cheapest_node)
+		rr(a, b);
+	set_position_node(*a);
+	set_position_node(*b);
+}
+
+void	reverse_rotate(t_list **a, t_list **b, t_list *cheapest_node)
+{
+	while (*a != cheapest_node->target_node
+		&& *b != cheapest_node)
+		rrr(a, b);
+	set_position_node(*a);
+	set_position_node(*b);
+}
+
+void	finish_rotation_a(t_list	**a, t_list *cheapest_node)
+{
+	while (*a != cheapest_node)
+	{
+		if (cheapest_node->above_mediane)
+			ra(a, 1);
+		else
+			rra(a, 1);
+	}
+}
+
+void	finish_rotation_b(t_list	**b, t_list *cheapest_node)
+{
+	while (*b != cheapest_node)
+	{
+		if (cheapest_node->above_mediane)
+			rb(b, 1);
+		else
+			rrb(b, 1);
+	}
 }

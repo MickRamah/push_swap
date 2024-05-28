@@ -126,15 +126,20 @@ void	set_position_node(t_list *stack)
 
 void	set_price(t_list *a, t_list *b)
 {
+	int	len_a;
+	int	len_b;
+
+	len_a = stack_len(a);
+	len_b = stack_len(b);
 	while (b)
 	{
 		b->push_price = b->current_position;
 		if (b->above_mediane == false)
-			b->push_price = stack_len(b) - b->current_position;
+			b->push_price = len_b - b->current_position;
 		if (b->target_node->above_mediane == true)
 			b->push_price += b->target_node->current_position;
 		else
-			b->push_price += stack_len(a) -  b->target_node->current_position;
+			b->push_price += len_a -  b->target_node->current_position;
 		b = b->next;
 	}
 }

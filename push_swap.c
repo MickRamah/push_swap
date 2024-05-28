@@ -70,11 +70,12 @@ static void	move_nodes(t_list **a, t_list **b)
 	t_list *cheapest_node;
 
 	cheapest_node = return_cheapest(*b);
+	// printf("cheapest_node->content = %d\n", cheapest_node->value);
 	if (cheapest_node->above_mediane && cheapest_node->target_node->above_mediane)
 		rotate(a, b, cheapest_node);
 	else if (!(cheapest_node->above_mediane) && !(cheapest_node->target_node->above_mediane))
 		reverse_rotate(a, b, cheapest_node);
-	finish_rotation_b(b, cheapest_node);
 	finish_rotation_a(a, cheapest_node->target_node);
+	finish_rotation_b(b, cheapest_node);
 	pa(a, b);
 }

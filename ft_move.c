@@ -1,6 +1,16 @@
-#include "push_swap.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_move.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zramahaz <zramahaz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/15 10:11:18 by zramahaz          #+#    #+#             */
+/*   Updated: 2024/05/30 14:59:06 by zramahaz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static void	swap(t_list **head);
+#include "push_swap.h"
 
 void	ss(t_list *a, t_list *b)
 {
@@ -13,9 +23,9 @@ void	sa(t_list *a, int status)
 {
 	int	tmp;
 
-	tmp = a->value;
-	a->value = a->next->value;
-	a->next->value = tmp;
+	tmp = a->content;
+	a->content = a->next->content;
+	a->next->content = tmp;
 	if (status)
 		write(1, "sa\n", 3);
 }
@@ -24,9 +34,9 @@ void	sb(t_list *b, int status)
 {
 	int	tmp;
 
-	tmp = b->value;
-	b->value = b->next->value;
-	b->next->value = tmp;
+	tmp = b->content;
+	b->content = b->next->content;
+	b->next->content= tmp;
 	if (status)
 		write(1, "sb\n", 3);
 }
@@ -86,7 +96,7 @@ void	rra(t_list **a, int status)
 	t_list	*last;
 	int		len;
 
-	len = stack_len(*a);
+	len = ft_stash_len(*a);
 	if (NULL == *a || NULL == a || 1 == len)
 		return ;
 	last = ft_get_last_list(*a);
@@ -104,7 +114,7 @@ void	rrb(t_list **b, int status)
 	t_list	*last;
 	int		len;
 
-	len = stack_len(*b);
+	len = ft_stash_len(*b);
 	if (NULL == *b || NULL == b || 1 == len)
 		return ;
 	last = ft_get_last_list(*b);
@@ -121,17 +131,14 @@ void	pa(t_list **a, t_list **b)
 {
 	t_list	*node_to_push;
 
-	if (NULL == *b)
-	{
-		printf("b(tete): %p\n", *b);
+	if (*b == NULL)
 		return ;		
-	}
 	node_to_push = *b;
 	*b = (*b)->next;
 	if (*b)
 		(*b)->prev = NULL;
 	node_to_push->prev = NULL;
-	if (NULL == *a)
+	if (*a == NULL)
 	{
 		*a = node_to_push;
 		node_to_push->next = NULL;
@@ -165,14 +172,14 @@ void	pb(t_list **a, t_list **b)
 
 	t_list	*node_to_push;
 
-	if (NULL == *a)
+	if (*a == NULL)
 		return ;
 	node_to_push = *a;
 	*a = (*a)->next;
 	if (*a)
 		(*a)->prev = NULL;
 	node_to_push->prev = NULL;
-	if (NULL == *b)
+	if (*b == NULL)
 	{
 		*b = node_to_push;
 		node_to_push->next = NULL;
@@ -202,42 +209,38 @@ void	pb(t_list **a, t_list **b)
 	write(1, "pb\n", 3);
 }
 
-void	rotate(t_list **a, t_list **b, t_list *cheapest_node)
+void	ft_rotation(t_list **a, t_list **b, t_list *shortest_path)
 {
-	while (*a != cheapest_node->target_node
-		&& *b != cheapest_node)
+	while (shortest_path != *b && shortest_path->target_node != *a)
 		rr(a, b);
-	set_position_node(*a);
-	set_position_node(*b);
+	ft_set_current_position(*a);
+	ft_set_current_position(*b);
 }
 
-void	reverse_rotate(t_list **a, t_list **b, t_list *cheapest_node)
+void	ft_reverse_rotation(t_list **a, t_list **b, t_list *shortest_path)
 {
-	while (*a != cheapest_node->target_node
-		&& *b != cheapest_node)
+	while (*b != shortest_path && *a != shortest_path->target_node)
 		rrr(a, b);
-	set_position_node(*a);
-	set_position_node(*b);
+	ft_set_current_position(*a);
+	ft_set_current_position(*b);
 }
 
-void	finish_rotation_a(t_list	**a, t_list *cheapest_node)
+void	ft_finish_rotation_b(t_list **b, t_list *shortest_path)
 {
-	while (*a != cheapest_node)
-	{
-		if (cheapest_node->above_mediane)
-			ra(a, 1);
-		else
-			rra(a, 1);
-	}
-}
-
-void	finish_rotation_b(t_list	**b, t_list *cheapest_node)
-{
-	while (*b != cheapest_node)
-	{
-		if (cheapest_node->above_mediane)
+	if (shortest_path->above_mediane)
+		while (*b != shortest_path)
 			rb(b, 1);
-		else
+	else
+		while (*b != shortest_path)
 			rrb(b, 1);
-	}
+}
+
+void	ft_finish_rotation_a(t_list **a, t_list *target_node)
+{
+	if (target_node->above_mediane)
+		while (*a != target_node)
+			ra(a, 1);
+	else
+		while (*a != target_node)
+			rra(a, 1);
 }

@@ -1,43 +1,49 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zramahaz <zramahaz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/08 11:58:32 by zramahaz          #+#    #+#             */
+/*   Updated: 2024/05/30 15:01:35 by zramahaz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
+# include <stdbool.h>
+# include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <limits.h>
-# include <stdlib.h>
-# include <stdbool.h>
 
 typedef struct s_list
 {
-    int             value;
-    int             current_position;
-    int             push_price;
-    bool            above_mediane;
-    bool            cheapest;
-    struct s_list   *next;
-    struct s_list   *prev;
-    struct s_list   *target_node;
-}                   t_list;
+	int				content;
+	int				current_position;
+	int				path_lenght;
+	bool			above_mediane;
+	bool			shortest_path;
+	struct s_list	*target_node;
+	struct s_list	*next;
+	struct s_list	*prev;
+}					t_list;
 
-int     main(int argc, char **argv);
-int	    ft_atoi(const char *str);
-int     stack_sorted(t_list *stack);
-int     stack_len(t_list *stack);
+void	push_swap(int argc, char **argv);
+void	ft_init_stash(int argc, char **argv, t_list **a);
 
 char	**ft_split(char const *s, char c);
-
-size_t	ft_strlen(const char *str);
-
 char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	*ft_strdup(const char *src);
+size_t	ft_strlen(const char *str);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+long	ft_atoi(const char *str);
 
-void    stack_init(int argc, char **argv, t_list **stack);
-void	push_swap(t_list **a, t_list **b);
-// void    affichage(t_list **stack);
-
-t_list	*ft_get_last_list(t_list *stash);
-t_list	*find_highest(t_list *stack);
-t_list	*find_smallest(t_list *stack);
-t_list	*return_cheapest(t_list *stack);
+int		ft_sorted_stash(t_list *a);
+size_t	ft_stash_len(t_list *a);
+t_list	*ft_find_highest_node(t_list *a);
+t_list	*ft_find_smallest_node(t_list *a);
+t_list  *ft_get_last_list(t_list *stash);
 
 void	ss(t_list *a, t_list *b);
 void	sa(t_list *a, int status);
@@ -50,17 +56,17 @@ void	rra(t_list **a, int status);
 void	rrb(t_list **b, int status);
 void	pa(t_list **a, t_list **b);
 void	pb(t_list **a, t_list **b);
+void	ft_rotation(t_list **a, t_list **b, t_list *shortest_path);
+void	ft_reverse_rotation(t_list **a, t_list **b, t_list *shortest_path);
+void	ft_finish_rotation_b(t_list **b, t_list *shortest_path);
+void	ft_finish_rotation_a(t_list **a, t_list *shortest_path);
 
-void	tiny_sort(t_list **stack);
+void	ft_sorted_3_nb(t_list **a);
+void    ft_sorted_multiple_nbs(t_list **a, t_list **b);
 
-void	set_target_node(t_list *a, t_list *b);
-void	set_position_node(t_list *stack);
-void	set_price(t_list *a, t_list *b);
-void	set_cheapest(t_list *stack);
-
-void	rotate(t_list **a, t_list **b, t_list *cheapest_node);
-void	reverse_rotate(t_list **a, t_list **b, t_list *cheapest_node);
-void	finish_rotation_a(t_list	**a, t_list *cheapest_node);
-void	finish_rotation_b(t_list	**b, t_list *cheapest_node);
+void	ft_set_current_position(t_list *stash);
+void	ft_set_target_node(t_list *a, t_list *b);
+void	ft_set_path_lenght(t_list *a, t_list *b);
+void	ft_set_shortest_path(t_list *b);
 
 #endif

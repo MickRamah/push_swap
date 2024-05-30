@@ -1,81 +1,84 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zramahaz <zramahaz@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/08 11:00:41 by zramahaz          #+#    #+#             */
+/*   Updated: 2024/05/30 16:55:52 by zramahaz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
-static void	handle_five(t_list **a, t_list **b);
-static void	init_nodes(t_list *a, t_list *b);
-static void	move_nodes(t_list **a, t_list **b);
+static void	affichage(t_list *a);
 
-void	tiny_sort(t_list **stack)
+static void	ft_free_stash(t_list **a);
+
+void	push_swap(int argc, char **argv)
 {
-	t_list	*highest_node;
+	t_list	*a;
+	t_list	*b;
 
-	highest_node = find_highest(*stack);
-	if (*stack == highest_node)
-		ra(stack, 1);
-	else if ((*stack)->next == highest_node)
-		rra(stack, 1);
-	if ((*stack)->value > (*stack)->next->value)
-		sa(*stack, 1);
-}
-
-void	push_swap(t_list **a, t_list **b)
-{
-	int	len;
-	t_list *min_node;
-
-	len = stack_len(*a);
-	if (len == 5)
-		handle_five(a, b);
+	a = NULL;
+	b = NULL;
+	if (argc == 1 || (argc == 2 && argv[1][0] == '\0'))
+		return ;
+	if (argc == 2)
+		argv = ft_split(argv[1], ' ');
 	else
+		argv = argv + 1;
+	ft_init_stash(argc, argv, &a);
+	affichage(a);
+	if (ft_sorted_stash(a) == 0)
 	{
-		while (len-- > 3)
-			pb(a, b);
+		if (ft_stash_len(a) == 2)
+			sa(a, 1);
+		else if (ft_stash_len(a) == 3)
+			ft_sorted_3_nb(&a);
+		else
+			ft_sorted_multiple_nbs(&a, &b);
 	}
-	tiny_sort(a);
-	while (*b)
-	{
-		init_nodes(*a, *b);
-		move_nodes(a, b);
-	}
-	set_position_node(*a);
-	min_node = find_smallest(*a);
-	if (min_node->above_mediane)
-		while (min_node != *a)
-			ra(a, 1);
-	else
-		while (min_node != *a)
-			rra(a, 1);
+	affichage(a);
+	ft_free_stash(&a);
 }
 
-static void	handle_five(t_list **a, t_list **b)
+static void	ft_free_stash(t_list **a)
 {
-	while (stack_len(*a) > 3)
+	t_list	*current; 
+	t_list	*tmp;
+
+	current = *a;
+	while (current)
 	{
-		init_nodes(*a, *b);
-		finish_rotation_a(a, find_smallest(*a));
-		pb(a, b);
+		tmp = current->next;
+		free(current);
+		current = tmp;
 	}
+	*a = NULL;
 }
 
-static void	init_nodes(t_list *a, t_list *b)
+static void	affichage(t_list *a)
 {
-	set_position_node(a);
-	set_position_node(b);
-	set_target_node(a, b);
-	set_price(a, b);
-	set_cheapest(b);
-}
+	t_list	*last;
 
-static void	move_nodes(t_list **a, t_list **b)
-{
-	t_list *cheapest_node;
-
-	cheapest_node = return_cheapest(*b);
-	// printf("cheapest_node->content = %d\n", cheapest_node->value);
-	if (cheapest_node->above_mediane && cheapest_node->target_node->above_mediane)
-		rotate(a, b, cheapest_node);
-	else if (!(cheapest_node->above_mediane) && !(cheapest_node->target_node->above_mediane))
-		reverse_rotate(a, b, cheapest_node);
-	finish_rotation_a(a, cheapest_node->target_node);
-	finish_rotation_b(b, cheapest_node);
-	pa(a, b);
+	last = ft_get_last_list(a);
+	printf("----------------------------------\n");
+	printf("(%p) ->", a->prev);
+	while (a)
+	{
+		printf("%d -> ", a->content);
+		a = a->next;
+	}
+	printf("(%p) \n", a);
+	printf("(%p) -> ", last->next);
+	while (last)
+	{
+		printf("%d ->", last->content);
+		last = last->prev;
+	}
+	printf("(%p)\n", a);
+	printf("----------------------------------\n");
+	
 }
